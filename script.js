@@ -67,12 +67,12 @@ document.querySelectorAll('.hero, .button, .project-card, .featured-project, .re
     frame = 0;
     surface.style.setProperty('--light-x', `${(x + 0.5) * 100}%`);
     surface.style.setProperty('--light-y', `${(y + 0.5) * 100}%`);
-    const distance = isHero ? 22 : isButton ? 12 : 0;
+    const distance = isHero ? 64 : isButton ? 28 : 0;
     surface.style.setProperty('--move-x', `${x * distance}px`);
     surface.style.setProperty('--move-y', `${y * distance}px`);
     if (surface.classList.contains('project-card')) {
-      surface.style.setProperty('--tilt-x', `${-y * 5}deg`);
-      surface.style.setProperty('--tilt-y', `${x * 5}deg`);
+      surface.style.setProperty('--tilt-x', `${-y * 14}deg`);
+      surface.style.setProperty('--tilt-y', `${x * 14}deg`);
     }
   }
 

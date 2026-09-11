@@ -28,7 +28,7 @@
   --press: 1;
   touch-action: manipulation;
   transform: translate(var(--move-x, 0px), var(--move-y, 0px)) scale(var(--press));
-  transition: transform .55s cubic-bezier(.22, 1.5, .36, 1), background .25s, border-color .25s, box-shadow .25s;
+  transition: transform .55s cubic-bezier(.22, 1.65, .36, 1), background .25s, border-color .25s, box-shadow .25s;
 }
 
 .button-primary {
@@ -48,12 +48,12 @@
 }
 
 .button:hover {
-  transform: translate(var(--move-x, 0px), calc(var(--move-y, 0px) - 2px)) scale(var(--press));
+  transform: translate(var(--move-x, 0px), calc(var(--move-y, 0px) - 4px)) scale(var(--press));
 }
 
 .button:active {
-  --press: .965;
-  transform: translate(var(--move-x, 0px), calc(var(--move-y, 0px) + 3px)) scale(var(--press));
+  --press: .94;
+  transform: translate(var(--move-x, 0px), calc(var(--move-y, 0px) + 4px)) scale(var(--press));
   box-shadow: inset 0 2px 4px #0003, 0 1px 0 #44444a;
   transition-duration: .08s;
 }
@@ -73,7 +73,7 @@
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
-  background: radial-gradient(420px circle at var(--light-x) var(--light-y), #ffffff12, transparent 75%);
+  background: radial-gradient(520px circle at var(--light-x) var(--light-y), #ffffff24, transparent 75%);
   opacity: 0;
   transition: opacity .5s;
   z-index: -1;
@@ -88,7 +88,7 @@
 }
 
 .project-card:active {
-  transform: perspective(1000px) scale(.985);
+  transform: perspective(1000px) scale(.97);
   transition-duration: .1s;
 }
 
@@ -107,21 +107,21 @@
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   .hero-art {
     translate: var(--move-x, 0px) var(--move-y, 0px);
-    transition: translate 1s cubic-bezier(.18, .7, .25, 1);
+    transition: translate .65s cubic-bezier(.18, .7, .25, 1);
   }
 
   .project-card.is-pointer-over,
   .featured-project.is-pointer-over {
-    border-color: #555560;
-    box-shadow: inset 0 1px 0 #ffffff24, 0 22px 45px #0009;
+    border-color: #777786;
+    box-shadow: inset 0 1px 0 #ffffff38, 0 28px 55px #000b;
   }
 
   .project-card.is-pointer-over {
-    transform: perspective(1000px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateY(-5px);
+    transform: perspective(1000px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateY(-10px);
   }
 
   .project-card.is-pointer-over:active {
-    transform: perspective(1000px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) scale(.985);
+    transform: perspective(1000px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) scale(.97);
     transition-duration: .08s;
   }
 
@@ -130,12 +130,12 @@
   }
 
   .research-item.is-pointer-over::before {
-    background: radial-gradient(320px circle at var(--light-x) var(--light-y), #ffffff0d, transparent 80%);
+    background: radial-gradient(440px circle at var(--light-x) var(--light-y), #ffffff24, transparent 80%);
   }
 
   .contribution-list > a:hover {
-    padding-left: 10px;
-    background: #ffffff04;
+    padding-left: 16px;
+    background: #ffffff0a;
   }
 
   .text-link > span,
@@ -146,7 +146,7 @@
 
   .text-link:hover > span,
   .site-header nav a:hover > span {
-    transform: translate(3px, -3px);
+    transform: translate(6px, -6px);
   }
 }
 
