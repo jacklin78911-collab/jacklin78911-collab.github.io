@@ -77,7 +77,7 @@ document.querySelector('.skip-link').addEventListener('click', event => {
 });
 
 // The stationary button owns the hit area; only its paper surface moves.
-const motion = matchMedia('(hover: hover) and (pointer: fine) and (min-width: 961px) and (prefers-reduced-motion: no-preference)');
+const motion = matchMedia('(hover: hover) and (pointer: fine) and (min-width: 851px) and (prefers-reduced-motion: no-preference)');
 const scene = document.querySelector('.orbit-scene');
 let frame = 0;
 let pointer;
