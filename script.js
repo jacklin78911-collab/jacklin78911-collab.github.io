@@ -5,12 +5,12 @@ const menu = document.getElementById('site-index');
 const nextButton = document.getElementById('next-scene');
 const labels = chapters.map(chapter => chapter.dataset.label);
 let active = -1;
+let progress = 0;
 let target = 0;
 let frame = 0;
+let lastTime = 0;
 let width = innerWidth;
 let height = innerHeight;
-let scrollUnit = height;
-let navigatingTo = null;
 let pointerX = 0;
 let pointerY = 0;
 
@@ -68,9 +68,10 @@ function paintUniverse(p) {
   const small = width <= 700;
   const x = small ? 78 - Math.min(p, 1) * 22 : 72 - Math.min(p, 1) * 46;
   const scale = small ? 1 - Math.min(p, 1) * .3 : 1 - Math.min(p, 1) * .42;
+  moon.style.left = x + '%';
+  moon.style.top = (small ? 38 : 49) + Math.sin(p * 1.4) * 7 + '%';
   moon.style.opacity = (small ? .62 : .84) * (.53 + homeBlend * .47);
-  const y = (small ? 38 : 49) + Math.sin(p * 1.4) * 7;
-  moon.style.transform = 'translate3d(' + (x * width / 100 + pointerX) + 'px,' + (y * height / 100 + pointerY) + 'px,0) translate(-50%,-50%) scale(' + scale + ') rotate(' + p * 13 + 'deg)';
+  moon.style.transform = 'translate(calc(-50% + ' + pointerX + 'px),calc(-50% + ' + pointerY + 'px)) scale(' + scale + ') rotate(' + p * 13 + 'deg)';
 }
 
 function selectActive(index) {
@@ -98,36 +99,40 @@ function selectActive(index) {
   }
 }
 
-function render() {
+function render(now) {
   frame = 0;
-  selectActive(Math.round(target));
-  // One scroll position drives every visual in this frame, in either direction.
-  const progress = reducedMotion.matches ? active : target;
+  const dt = lastTime ? Math.min(now - lastTime, 40) : 16;
+  lastTime = now;
+  progress = reducedMotion.matches ? target : progress + (target - progress) * (1 - Math.exp(-dt / 70));
+  if (Math.abs(progress - target) < .0005) progress = target;
+  selectActive(Math.max(0, Math.min(chapters.length - 1, Math.round(progress))));
   chapters.forEach((chapter, i) => {
     const distance = i - progress;
-    const visible = Math.abs(distance) < 1;
-    chapter.style.visibility = visible ? 'visible' : 'hidden';
-    chapter.style.opacity = visible ? 1 - Math.abs(distance) * .35 : 0;
-    chapter.style.transform = 'translate3d(0,' + distance * 100 + '%,0)';
+    const opacity = reducedMotion.matches ? Number(i === active) : Math.max(0, 1 - Math.abs(distance) * 1.85);
+    chapter.style.opacity = opacity;
+    chapter.style.transform = reducedMotion.matches ? 'none' : 'translate3d(0,' + distance * 100 + 'px,0) scale(' + (1 - Math.min(Math.abs(distance), 1) * .07) + ')';
   });
-  document.getElementById('position-fill').style.transform = 'scaleX(' + ((progress + 1) / chapters.length) + ')';
+  document.getElementById('position-fill').style.width = ((progress + 1) / chapters.length * 100) + '%';
   paintUniverse(progress);
-  if (navigatingTo !== null && Math.abs(target - navigatingTo) < .005) navigatingTo = null;
-  if (navigatingTo === null && location.hash !== '#' + chapters[active].id) {
-    history.replaceState(null, '', '#' + chapters[active].id);
+  if (progress !== target && !document.hidden) frame = requestAnimationFrame(render);
+  else {
+    lastTime = 0;
+    if (Math.abs(progress - active) < .005 && location.hash !== '#' + chapters[active].id) {
+      history.replaceState(null, '', '#' + chapters[active].id);
+    }
   }
 }
 function requestRender() {
   if (!frame && !document.hidden) frame = requestAnimationFrame(render);
 }
 function updateScroll() {
-  target = Math.max(0, Math.min(chapters.length - 1, scrollY / scrollUnit));
+  const unit = steps[0].getBoundingClientRect().height;
+  target = Math.max(0, Math.min(chapters.length - 1, scrollY / unit));
   requestRender();
 }
 function resize() {
   width = innerWidth;
   height = innerHeight;
-  scrollUnit = steps[0].getBoundingClientRect().height;
   if (ctx) {
     const ratio = Math.min(devicePixelRatio || 1, 2);
     canvas.width = Math.round(width * ratio);
@@ -139,9 +144,10 @@ function resize() {
 function navigate(index, { push = true, instant = false } = {}) {
   const i = Math.max(0, Math.min(chapters.length - 1, index));
   if (push && location.hash !== '#' + chapters[i].id) history.pushState(null, '', '#' + chapters[i].id);
-  navigatingTo = i;
-  scrollTo({ top: steps[i].offsetTop, behavior: instant || reducedMotion.matches ? 'instant' : 'smooth' });
-  updateScroll();
+  scrollTo({ top: steps[i].offsetTop, behavior: 'instant' });
+  target = i;
+  if (instant || reducedMotion.matches) progress = i;
+  requestRender();
 }
 function hashIndex() {
   const id = location.hash.slice(1);
@@ -170,13 +176,9 @@ nextButton.addEventListener('click', () => navigate(active + 1));
 window.addEventListener('scroll', updateScroll, { passive: true });
 window.addEventListener('resize', resize, { passive: true });
 window.addEventListener('hashchange', () => navigate(hashIndex(), { push: false }));
-// Native gestures interrupt a directory jump; they never get cancelled or locked.
-for (const type of ['wheel', 'touchstart', 'keydown']) {
-  window.addEventListener(type, () => { navigatingTo = null; }, { passive: true });
-}
 reducedMotion.addEventListener('change', requestRender);
 document.addEventListener('visibilitychange', () => {
-  if (document.hidden) { cancelAnimationFrame(frame); frame = 0; }
+  if (document.hidden) { cancelAnimationFrame(frame); frame = 0; lastTime = 0; }
   else updateScroll();
 });
 window.addEventListener('pointermove', event => {
