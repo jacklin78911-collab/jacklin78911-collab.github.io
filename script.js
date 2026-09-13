@@ -80,7 +80,6 @@ function selectActive(index) {
   chapters.forEach((chapter, i) => {
     const selected = i === active;
     chapter.classList.toggle('is-active', selected);
-    chapter.style.transform = selected ? 'none' : 'translate3d(0,' + (i < active ? -40 : 40) + 'px,0)';
     chapter.inert = !selected;
     chapter.setAttribute('aria-hidden', String(!selected));
   });
@@ -102,8 +101,17 @@ function selectActive(index) {
 function render() {
   frame = 0;
   selectActive(Math.round(target));
-  document.getElementById('position-fill').style.transform = 'scaleX(' + ((target + 1) / chapters.length) + ')';
-  paintUniverse(reducedMotion.matches ? active : target);
+  // One scroll position drives every visual in this frame, in either direction.
+  const progress = reducedMotion.matches ? active : target;
+  chapters.forEach((chapter, i) => {
+    const distance = i - progress;
+    const visible = Math.abs(distance) < 1;
+    chapter.style.visibility = visible ? 'visible' : 'hidden';
+    chapter.style.opacity = visible ? 1 - Math.abs(distance) * .35 : 0;
+    chapter.style.transform = 'translate3d(0,' + distance * 100 + '%,0)';
+  });
+  document.getElementById('position-fill').style.transform = 'scaleX(' + ((progress + 1) / chapters.length) + ')';
+  paintUniverse(progress);
   if (navigatingTo !== null && Math.abs(target - navigatingTo) < .005) navigatingTo = null;
   if (navigatingTo === null && location.hash !== '#' + chapters[active].id) {
     history.replaceState(null, '', '#' + chapters[active].id);
