@@ -8,9 +8,9 @@
   <title>林李谦 Liqian Lin</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="preload" href="./space-grotesk.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="./styles.css?v=6-restored">
-  <script src="./script.js?v=6-restored" defer></script>
-  <script src="./activity.js?v=6" defer></script>
+  <link rel="stylesheet" href="./styles.css?v=6-polish">
+  <script src="./script.js?v=6-polish" defer></script>
+  <script src="./activity.js?v=6-polish" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#home">跳到正文</a>
@@ -36,14 +36,14 @@
     <section class="chapter" id="vllm" aria-labelledby="vllm-title" data-label="vLLM">
       <div class="chapter-content work-layout">
         <div class="work-heading"><p class="kicker">01 / OPEN SOURCE</p><h2 id="vllm-title">vLLM<span class="name-period">.</span></h2><p class="work-domain">KV OFFLOADING</p><div class="signal-diagram" aria-hidden="true"><span>REQUEST</span><i></i><span>CONTEXT</span><i></i><span>CACHE</span></div></div>
-        <div class="work-copy">
-          <p class="section-label">核心贡献</p>
+        <div class="work-copy vllm-copy">
           <h3>请求上下文<br>传入缓存策略。</h3>
-          <p class="description">将 ReqContext 从 CPUOffloadingManager 传入 CachePolicy.touch，为感知请求的缓存策略提供上下文。</p>
-          <div class="feed" id="vllm-feed" aria-label="vLLM 最近贡献"><a class="activity-row" href="https://github.com/vllm-project/vllm/pull/47744" target="_blank" rel="noopener noreferrer"><span class="activity-main"><strong>Pass request context to CPU offload cache policy touch</strong><small>#47744 · 2026.07.08</small></span><span class="pr-state merged">已合并</span><span class="link-arrow" aria-hidden="true">↗</span></a></div>
-          <a class="inline-link" href="https://github.com/vllm-project/vllm/issues/45405" target="_blank" rel="noopener noreferrer">RFC #45405 <span>请求感知的 KV 驱逐策略</span><b aria-hidden="true">↗</b></a>
-          <details class="research-detail"><summary>KV Cache 分层研究 <span aria-hidden="true">＋</span></summary><div><p>在报告的受控多轮负载中，前缀恢复将第二轮首 token 延迟从 661 ms 降至 158 ms。容量受限时，所测 LRU / ARC 未恢复完整前缀。</p><a class="inline-link" href="https://github.com/jacklin78911-collab/kv-cache-tiering-study/raw/main/kv-tiering-technical-report.pdf" target="_blank" rel="noopener noreferrer">技术报告 <b aria-hidden="true">↗</b></a><a class="inline-link" href="https://github.com/jacklin78911-collab/kv-cache-tiering-study" target="_blank" rel="noopener noreferrer">研究仓库 <b aria-hidden="true">↗</b></a></div></details>
-          <p class="sync-status" id="vllm-sync">数据截至 2026.09.11</p>
+          <p class="description">将请求上下文 ReqContext 接入 CPU KV Cache 的策略接口。</p>
+          <a class="featured-contribution" href="https://github.com/vllm-project/vllm/pull/47744" target="_blank" rel="noopener noreferrer"><span><small>代表贡献 · 已合并 · #47744</small><strong>请求上下文 → CachePolicy.touch</strong></span><span class="featured-arrow" aria-hidden="true">↗</span></a>
+          <div class="feed-heading"><span>最近动态</span><a href="https://github.com/vllm-project/vllm/pulls?q=is%3Apr+author%3Ajacklin78911-collab" target="_blank" rel="noopener noreferrer">全部贡献 <span aria-hidden="true">↗</span></a></div>
+          <div class="feed" id="vllm-feed" aria-label="vLLM 最近动态"><a class="activity-row" href="https://github.com/vllm-project/vllm/pull/56836" target="_blank" rel="noopener noreferrer"><span class="activity-main"><strong>Bound unanswered P2P lookup waits</strong><small>#56836 · 2026.09.15</small></span><span class="pr-state open">进行中</span><span class="link-arrow" aria-hidden="true">↗</span></a></div>
+          <details class="research-detail"><summary>研究与设计说明 <span aria-hidden="true">＋</span></summary><div><a class="inline-link" href="https://github.com/vllm-project/vllm/issues/45405" target="_blank" rel="noopener noreferrer">RFC #45405 <span>请求感知的 KV 驱逐策略</span><b aria-hidden="true">↗</b></a><p>KV Cache 分层研究：在报告的受控多轮负载中，前缀恢复将第二轮首 token 延迟从 661 ms 降至 158 ms。容量受限时，所测 LRU / ARC 未恢复完整前缀。</p><a class="inline-link" href="https://github.com/jacklin78911-collab/kv-cache-tiering-study/raw/main/kv-tiering-technical-report.pdf" target="_blank" rel="noopener noreferrer">技术报告 <b aria-hidden="true">↗</b></a><a class="inline-link" href="https://github.com/jacklin78911-collab/kv-cache-tiering-study" target="_blank" rel="noopener noreferrer">研究仓库 <b aria-hidden="true">↗</b></a></div></details>
+          <p class="sync-status" id="vllm-sync" data-snapshot="2026.09.15">数据截至 2026.09.15</p>
         </div>
       </div>
     </section>
@@ -56,7 +56,7 @@
           <p class="description">TCP 连接生命周期、并行通道、内存注册，以及传输任务的完成与回收。</p>
           <div class="feed" id="mooncake-feed" aria-label="Mooncake 最近贡献"><a class="activity-row" href="https://github.com/kvcache-ai/Mooncake/pull/4051" target="_blank" rel="noopener noreferrer"><span class="activity-main"><strong>[Bugfix] Fix GIL misuse in TENT Python guard exits</strong><small>#4051 · 2026.09.11</small></span><span class="pr-state open">进行中</span><span class="link-arrow" aria-hidden="true">↗</span></a><a class="activity-row" href="https://github.com/kvcache-ai/Mooncake/pull/4001" target="_blank" rel="noopener noreferrer"><span class="activity-main"><strong>[TENT] Fix standard TCP completion, permissions and task accounting</strong><small>#4001 · 2026.09.11</small></span><span class="pr-state merged">已合并</span><span class="link-arrow" aria-hidden="true">↗</span></a><a class="activity-row" href="https://github.com/kvcache-ai/Mooncake/pull/4002" target="_blank" rel="noopener noreferrer"><span class="activity-main"><strong>[TENT] Revoke registrations removed by failed batch rollback</strong><small>#4002 · 2026.09.11</small></span><span class="pr-state merged">已合并</span><span class="link-arrow" aria-hidden="true">↗</span></a></div>
           <a class="inline-link" href="https://github.com/kvcache-ai/Mooncake/pulls?q=is%3Apr+author%3Ajacklin78911-collab" target="_blank" rel="noopener noreferrer">全部贡献 <b aria-hidden="true">↗</b></a>
-          <p class="sync-status" id="mooncake-sync">数据截至 2026.09.11</p>
+          <p class="sync-status" id="mooncake-sync" data-snapshot="2026.09.11">数据截至 2026.09.11</p>
         </div>
       </div>
     </section>
@@ -76,7 +76,7 @@
     </section>
   </main>
 
-  <footer class="scene-footer"><button class="next-scene" id="next-scene"><span class="wheel-icon" aria-hidden="true"><i></i></span><span id="scroll-label">滚动探索</span><span aria-hidden="true">↓</span></button><div class="scene-position"><span id="current-label">林李谦</span><span class="position-track"><i id="position-fill"></i></span><span id="current-number">01</span><span class="position-total">/ 05</span></div></footer>
+  <footer class="scene-footer"><button class="next-scene" id="next-scene"><span class="wheel-icon" aria-hidden="true"><i></i></span><span id="scroll-label">滚动探索</span><span aria-hidden="true">↓</span></button><div class="scene-position"><span id="current-label">林李谦</span><nav class="chapter-nav" aria-label="章节快捷导航"><a href="#home" aria-label="首页" data-label="首页">01</a><a href="#vllm" aria-label="vLLM" data-label="vLLM">02</a><a href="#mooncake" aria-label="Mooncake" data-label="Mooncake">03</a><a href="#glossa" aria-label="Glossa" data-label="Glossa">04</a><a href="#blog" aria-label="博客" data-label="博客">05</a></nav></div></footer>
   <dialog id="site-index" aria-labelledby="index-title"><div class="index-heading"><span id="index-title">目录</span><button id="index-close" aria-label="关闭目录">×</button></div><nav aria-label="章节导航"><a href="#home"><span>00</span>林李谦</a><a href="#vllm"><span>01</span>vLLM</a><a href="#mooncake"><span>02</span>Mooncake</a><a href="#glossa"><span>03</span>Glossa</a><a href="#blog"><span>04</span>博客</a></nav></dialog>
   <noscript><style>#index-toggle,.scene-footer{display:none}.chapter{min-height:100svh}.universe{opacity:.35}</style></noscript>
 </body>

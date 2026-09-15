@@ -3,8 +3,8 @@
   const interval = 5 * 60 * 1000;
   const cacheKey = 'liqian-github-activity-v1';
   const sources = [
-    { id: 'vllm', repo: 'vllm-project/vllm' },
-    { id: 'mooncake', repo: 'kvcache-ai/Mooncake' }
+    { id: 'vllm', repo: 'vllm-project/vllm', featured: 47744, limit: 1 },
+    { id: 'mooncake', repo: 'kvcache-ai/Mooncake', limit: 3 }
   ];
   let cache = {};
   let lastAttempt = 0;
@@ -21,7 +21,7 @@
   function render(source, record, stale = false) {
     const container = document.getElementById(source.id + '-feed');
     const fragment = document.createDocumentFragment();
-    for (const item of record.items.slice(0, 3)) {
+    for (const item of record.items.filter(item => item.number !== source.featured).slice(0, source.limit)) {
       const link = document.createElement('a');
       link.className = 'activity-row';
       link.href = 'https://github.com/' + source.repo + '/pull/' + item.number;
@@ -30,7 +30,7 @@
       const main = document.createElement('span');
       main.className = 'activity-main';
       const title = document.createElement('strong');
-      title.textContent = item.title.replace(/^\[[^\]]+\]\s*/, '');
+      title.textContent = item.title.replace(/^(\[[^\]]+\]\s*)+/, '');
       const meta = document.createElement('small');
       meta.textContent = '#' + item.number + ' · ' + item.updated.slice(0, 10).replaceAll('-', '.');
       main.append(title, meta);
@@ -43,6 +43,12 @@
       arrow.setAttribute('aria-hidden', 'true');
       link.append(main, state, arrow);
       fragment.append(link);
+    }
+    if (!fragment.childNodes.length) {
+      const empty = document.createElement('p');
+      empty.className = 'feed-empty';
+      empty.textContent = '暂无其他动态';
+      fragment.append(empty);
     }
     // Keep focus and text selection intact while the visitor is reading a PR.
     const selected = document.getSelection();
@@ -103,7 +109,10 @@
           try { localStorage.setItem(cacheKey, JSON.stringify(cache)); } catch { /* Continue without a persistent cache. */ }
         } catch {
           if (cache[source.id]) render(source, cache[source.id], true);
-          else document.getElementById(source.id + '-sync').textContent = '暂无法同步 · 显示 2026.09.11 数据';
+          else {
+            const status = document.getElementById(source.id + '-sync');
+            status.textContent = '暂无法同步 · 显示 ' + status.dataset.snapshot + ' 数据';
+          }
           if (Date.now() < nextAllowed) break;
         }
       }

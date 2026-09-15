@@ -85,11 +85,10 @@ function selectActive(index) {
     chapter.setAttribute('aria-hidden', String(!selected));
   });
   document.getElementById('current-label').textContent = labels[index];
-  document.getElementById('current-number').textContent = String(index + 1).padStart(2, '0');
   nextButton.disabled = index === chapters.length - 1;
   document.getElementById('scroll-label').textContent = index === 0 ? '滚动探索' : index === chapters.length - 1 ? '已到最后一幕' : '继续向下';
   document.title = index === 0 ? '林李谦 Liqian Lin' : labels[index] + ' — 林李谦';
-  document.querySelectorAll('#site-index nav a').forEach(link => {
+  document.querySelectorAll('#site-index nav a, .chapter-nav a').forEach(link => {
     if (link.hash === '#' + chapters[index].id) link.setAttribute('aria-current', 'page');
     else link.removeAttribute('aria-current');
   });
@@ -112,7 +111,6 @@ function render(now) {
     chapter.style.opacity = opacity;
     chapter.style.transform = reducedMotion.matches ? 'none' : 'translate3d(0,' + distance * 100 + 'px,0) scale(' + (1 - Math.min(Math.abs(distance), 1) * .07) + ')';
   });
-  document.getElementById('position-fill').style.width = ((progress + 1) / chapters.length * 100) + '%';
   paintUniverse(progress);
   if (progress !== target && !document.hidden) frame = requestAnimationFrame(render);
   else {
