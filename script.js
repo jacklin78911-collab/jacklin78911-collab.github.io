@@ -29,6 +29,7 @@ const steps = [...track.children];
 const canvas = document.getElementById('star-field');
 const ctx = canvas.getContext('2d');
 const moon = document.querySelector('.moon');
+const profileStack = document.querySelector('.profile-stack');
 const stars = Array.from({ length: 170 }, (_, index) => ({
   x: ((Math.sin(index * 127.1 + 5) * 43758.5453) % 1 + 1) % 1,
   y: ((Math.sin(index * 311.7 + 8) * 25123.823) % 1 + 1) % 1,
@@ -72,6 +73,7 @@ function paintUniverse(p) {
   moon.style.top = (small ? 38 : 49) + Math.sin(p * 1.4) * 7 + '%';
   moon.style.opacity = (small ? .62 : .84) * (.53 + homeBlend * .47);
   moon.style.transform = 'translate(calc(-50% + ' + pointerX + 'px),calc(-50% + ' + pointerY + 'px)) scale(' + scale + ') rotate(' + p * 13 + 'deg)';
+  profileStack.style.transform = reducedMotion.matches ? 'none' : 'translate3d(' + -pointerX * .3 + 'px,' + -pointerY * .3 + 'px,0) rotate(' + pointerX * .035 + 'deg)';
 }
 
 function selectActive(index) {
