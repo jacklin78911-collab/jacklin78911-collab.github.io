@@ -51,6 +51,7 @@ h1{font-size:clamp(100px,min(17vw,26vh),240px);font-weight:500;letter-spacing:-.
 .work-copy{max-height:100%;overflow-y:auto;overflow-x:hidden;padding:4px 4px 8px;scrollbar-width:thin;scrollbar-color:#444 transparent;overscroll-behavior-y:auto}
 .section-label{margin:0 0 22px;color:#a7ada1;font-size:12px;letter-spacing:1px}
 .work-copy h3{font-size:clamp(27px,2.65vw,40px);font-weight:500;letter-spacing:-1px;line-height:1.35;margin:0 0 22px}
+.vllm-copy h3{text-wrap:balance}
 .description{font-size:16px;color:#bec1b8;line-height:1.85;margin:0 0 25px;overflow-wrap:anywhere}
 .signal-diagram{display:flex;gap:12px;align-items:center;color:#88917f;font-size:10px;letter-spacing:1px;margin-top:74px;max-width:330px}
 .signal-diagram i{height:1px;background:linear-gradient(90deg,#ffffff20,#ffffff70);flex:1;min-width:15px;position:relative}.signal-diagram i::after{content:"";position:absolute;width:4px;height:4px;right:0;top:-1.5px;background:#b9c2af}

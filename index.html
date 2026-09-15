@@ -8,7 +8,7 @@
   <title>林李谦 Liqian Lin</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="preload" href="./space-grotesk.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="./styles.css?v=6-paper">
+  <link rel="stylesheet" href="./styles.css?v=6-terms">
   <script src="./script.js?v=6-paper" defer></script>
   <script src="./activity.js?v=6-polish" defer></script>
 </head>
@@ -47,12 +47,12 @@
       <div class="chapter-content work-layout">
         <div class="work-heading"><p class="kicker">01 / OPEN SOURCE</p><h2 id="vllm-title">vLLM<span class="name-period">.</span></h2><p class="work-domain">KV OFFLOADING</p><div class="signal-diagram" aria-hidden="true"><span>REQUEST</span><i></i><span>CONTEXT</span><i></i><span>CACHE</span></div></div>
         <div class="work-copy vllm-copy">
-          <h3>请求上下文<br>传入缓存策略。</h3>
-          <p class="description">将请求上下文 ReqContext 接入 CPU KV Cache 的策略接口。</p>
-          <a class="featured-contribution" href="https://github.com/vllm-project/vllm/pull/47744" target="_blank" rel="noopener noreferrer"><span><small>代表贡献 · 已合并 · #47744</small><strong>请求上下文 → CachePolicy.touch</strong></span><span class="featured-arrow" aria-hidden="true">↗</span></a>
+          <h3 lang="en">Request Context for Cache Policies.</h3>
+          <p class="description" lang="en">Pass ReqContext into CachePolicy.touch for CPU KV Cache offloading.</p>
+          <a class="featured-contribution" href="https://github.com/vllm-project/vllm/pull/47744" target="_blank" rel="noopener noreferrer"><span><small>代表贡献 · 已合并 · #47744</small><strong lang="en">Pass ReqContext to CachePolicy.touch</strong></span><span class="featured-arrow" aria-hidden="true">↗</span></a>
           <div class="feed-heading"><span>最近动态</span><a href="https://github.com/vllm-project/vllm/pulls?q=is%3Apr+author%3Ajacklin78911-collab" target="_blank" rel="noopener noreferrer">全部贡献 <span aria-hidden="true">↗</span></a></div>
           <div class="feed" id="vllm-feed" aria-label="vLLM 最近动态"><a class="activity-row" href="https://github.com/vllm-project/vllm/pull/56836" target="_blank" rel="noopener noreferrer"><span class="activity-main"><strong>Bound unanswered P2P lookup waits</strong><small>#56836 · 2026.09.15</small></span><span class="pr-state open">进行中</span><span class="link-arrow" aria-hidden="true">↗</span></a></div>
-          <details class="research-detail"><summary>研究与设计说明 <span aria-hidden="true">＋</span></summary><div><a class="inline-link" href="https://github.com/vllm-project/vllm/issues/45405" target="_blank" rel="noopener noreferrer">RFC #45405 <span>请求感知的 KV 驱逐策略</span><b aria-hidden="true">↗</b></a><p>KV Cache 分层研究：在报告的受控多轮负载中，前缀恢复将第二轮首 token 延迟从 661 ms 降至 158 ms。容量受限时，所测 LRU / ARC 未恢复完整前缀。</p><a class="inline-link" href="https://github.com/jacklin78911-collab/kv-cache-tiering-study/raw/main/kv-tiering-technical-report.pdf" target="_blank" rel="noopener noreferrer">技术报告 <b aria-hidden="true">↗</b></a><a class="inline-link" href="https://github.com/jacklin78911-collab/kv-cache-tiering-study" target="_blank" rel="noopener noreferrer">研究仓库 <b aria-hidden="true">↗</b></a></div></details>
+          <details class="research-detail"><summary>研究与设计说明 <span aria-hidden="true">＋</span></summary><div><a class="inline-link" href="https://github.com/vllm-project/vllm/issues/45405" target="_blank" rel="noopener noreferrer">RFC #45405 <span lang="en">Request-aware KV Eviction</span><b aria-hidden="true">↗</b></a><p lang="en">KV Cache Tiering: on the controlled multi-turn workload in the report, prefix restoration reduced second-turn TTFT from 661 ms to 158 ms. Under the tested capacity limit, LRU / ARC did not restore the full prefix.</p><a class="inline-link" href="https://github.com/jacklin78911-collab/kv-cache-tiering-study/raw/main/kv-tiering-technical-report.pdf" target="_blank" rel="noopener noreferrer">技术报告 <b aria-hidden="true">↗</b></a><a class="inline-link" href="https://github.com/jacklin78911-collab/kv-cache-tiering-study" target="_blank" rel="noopener noreferrer">研究仓库 <b aria-hidden="true">↗</b></a></div></details>
           <p class="sync-status" id="vllm-sync" data-snapshot="2026.09.15">数据截至 2026.09.15</p>
         </div>
       </div>
