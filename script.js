@@ -181,8 +181,8 @@ document.addEventListener('visibilitychange', () => {
 });
 window.addEventListener('pointermove', event => {
   if (reducedMotion.matches || event.pointerType !== 'mouse') return;
-  pointerX = (event.clientX / width - .5) * 20;
-  pointerY = (event.clientY / height - .5) * 14;
+  pointerX = (event.clientX / width - .5) * 100;
+  pointerY = (event.clientY / height - .5) * 70;
   requestRender();
 }, { passive: true });
 resize();
