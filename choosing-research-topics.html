@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b0c0a">
+  <meta name="description" content="调好的 baseline、算得清的收益上界，还有一轮没能下结论的实验。最近，我开始认真研究一个问题：什么时候该停止给 idea 续命。">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="最近的科研进展：毙了不少选题">
+  <meta property="og:description" content="调好的 baseline、算得清的收益上界，还有一轮没能下结论的实验。最近，我开始认真研究一个问题：什么时候该停止给 idea 续命。">
+  <title>最近的科研进展：毙了不少选题 — 林李谦</title>
+  <link rel="canonical" href="https://jacklin78911-collab.github.io/choosing-research-topics.html">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./article.css?v=1">
+</head>
+<body>
+  <a class="skip-link" href="#article">跳到正文</a>
+  <header class="article-nav"><a class="author" href="./index.html#home">LIQIAN LIN<span>林李谦</span></a><a href="./index.html#blog">返回博客 <span aria-hidden="true">↗</span></a></header>
+  <main class="article-shell" id="article">
+    <article>
+      <header class="article-heading">
+        <p class="article-kicker">01 <span aria-hidden="true">/</span> 研究手记</p>
+        <h1>最近的科研进展：毙了不少选题</h1>
+        <p class="article-meta"><span>林李谦</span><time datetime="2026-09-15">2026.09.15</time><span>约 6 分钟</span></p>
+      </header>
+      <div class="article-content">
+<p>最近，如果要用一句话汇报科研进展，大概是：提出了一些看起来能做的 idea，又给其中不少写好了停止理由。</p>
+<p>这个进展听起来不太喜庆。代码写了，论文读了，实验也跑了，最后留下一句“这条先不做”。但把几轮过程放在一起看，最有意思的部分恰好在这里：每个 idea 刚来的时候，都有一套相当体面的说辞。</p>
+<p>后来，它们陆续遇到了调过参数的 baseline、算得清楚的收益上界，以及不肯配合讲故事的数据。</p>
+<h2 id="baseline">最难打的对手，是睡醒了的 baseline</h2>
+<p>有一条线，我想用更快的 TCP 传输来减少后训练里的权重同步等待。推理端要使用训练端更新后的模型，得先拿到新权重；这段搬运可能造成等待，搬得快一点，听起来很可能有用。手里又正好有在做的传输实现，这个选题的开场十分顺畅。</p>
+<p>真正麻烦的是下一步：要证明它比合理调优的旧实现更好，还得证明省下的传输时间能落到最终的等待上。接口接通，只完成了第一道手续。</p>
+<p>在受控的双机传输对照里，某个配置下，新实现看起来有优势。继续调整旧实现的分块大小和并发度后，差距收窄了，独立重复也没形成稳定的性能排序。</p>
+<p>这时候再扩大训练规模，很难回答眼前这个问题：我到底改进了传输机制，还是先挑到了一个没调好的对手？</p>
+<p>于是，这条“换个传输后端就能加速后训练”的支线先停下。过程中找到的 bug 继续修，工程改进继续做。论文主张需要另外拿证据来领。</p>
+<blockquote><p>给自己的方案做优化很积极，给 baseline 调参数也得一样积极。虽然调完之后，自己的方案可能就失业了。</p></blockquote>
+<h2 id="upper-bound">有些 idea，连开挂的空间都不够</h2>
+<p>另一条线与 agent 的记忆更新有关。新经历写进来之后，还要抽取、索引、整理；全做完再回答可能慢，放到后台又担心下一次查询读到旧内容。于是自然会想到：让系统知道当前 query 真正依赖哪些更新，优先处理它们。</p>
+<p>这个故事很容易继续往下长。先有依赖预测，再有动态优先级，接着是一个漂亮的 scheduler。想法还在体检，系统架构图已经发育成熟。</p>
+<p>但我先看了这套机制最多能省多少。在这轮测量和回放设定里，轻量记忆写入本来就便宜，固定策略往往在查询到来前已经做完。即使把依赖信息理想化，也没有打开足够的额外收益空间。</p>
+<p>这比“预测器不够准”更难补。预测器还可以换，原本就没多少等待可省，却很难靠多加一个模块解决。</p>
+<p>还有个容易漏掉的区别：一个问题只依赖少量历史，确实说明依赖稀疏；它并不能保证 query 到来时，后台恰好堆着一批相关和无关的更新，等我来调度。数据里有历史记录，离真实服务中的到达时序，还隔着一层证据。</p>
+<p>这条线停在了这里。更昂贵、更频繁的记忆更新也许会改变判断，但得先找到这样的 workload。暂时没有必要替一个还没出现的队列，写一位很忙的调度员。</p>
+<h2 id="inconclusive">还有一种结论，叫“先别宣布”</h2>
+<p>并不是每轮实验都能干脆地判死刑。做投机解码的残差专门化分支时，我想让额外的 draft branch 更擅长补上原草稿容易被拒绝的部分。直觉上，两条分支各有所长，应该比两条差不多的分支更有用。</p>
+<p>但这一轮配对训练和评估给出的增益很小，置信区间跨过零；补做的一次学习率诊断，也没让判断清晰起来。于是，没有继续进入后面的吞吐验证。</p>
+<p>这轮的标签是 INCONCLUSIVE：目前的证据没能支持继续扩大投入，也不足以否定整个方向。</p>
+<p>“还不知道”有点不适合写在进展标题里。可实验没有义务替周报提供一个斩钉截铁的结尾。</p>
+<h2 id="stop">给 idea 续命，技术上总有办法</h2>
+<p>几轮下来，我开始警惕一种非常顺手的反应：一看收益不够，就想再加点东西。固定策略打不过，就加 adaptive；优先级不够，就加预测；这个场景不明显，再换个更复杂的场景。</p>
+<p>这些机制当然可能有用。每加一个模块，都得有具体的观察作依据：到底发生了什么，是现有办法处理不了的？如果这个问题答不上来，新模块通常只会让下一轮实验更难解释。</p>
+<p>我现在更愿意在动手前，把几件事写下来：</p>
+<ol>
+  <li>真实 workload 里，谁在等什么？这个等待有多大？</li>
+  <li>把现有方案调好之后，还剩多少问题？</li>
+  <li>假设我的机制完美工作，收益上界够不够值得做？</li>
+  <li>看到什么结果，就停止当前方案，或者重新定义问题？</li>
+</ol>
+<p>最后一条尤其重要。没有事先写下的停止条件，任何结果都很容易变成“再加一个实验看看”。选题会慢慢从研究问题，长成一段舍不得结束的工程。</p>
+<p>当然，也不能把“毙得快”本身当成成绩。有些方案只是在当前负载下不划算，有些被简单办法追平，有些只是这一轮没看清。停止之前，得把到底停了什么写准。</p>
+<p>我还在找值得长期做的问题。最近这些尝试留下来的，是更具体的判断：哪些成本小得不用动，哪些优势经不起强基线，哪些实验还不能下结论。</p>
+<p>至于下一个 idea——先别急着取一个四字母缩写。让它见一见调好参数的 baseline，再说。</p>
+      </div>
+      <footer class="article-end"><span>写于又一轮选题之后。</span><a href="./index.html#blog">回到博客 <span aria-hidden="true">↗</span></a></footer>
+    </article>
+  </main>
+  <footer class="site-credit">林李谦 · Liqian Lin <a href="https://github.com/jacklin78911-collab" target="_blank" rel="noopener noreferrer">GitHub ↗</a></footer>
+</body>
+</html>
+
